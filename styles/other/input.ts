@@ -11,6 +11,12 @@ border: 1px solid #CACCCB;
 border-radius: ${themes.primary.borderRadius};
 margin: ${(props: { margin?: string }) => props.margin || "0 0 35px 0"};
 
+&::-webkit-inner-spin-button,
+&::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 &:focus {
   outline: none;
 }

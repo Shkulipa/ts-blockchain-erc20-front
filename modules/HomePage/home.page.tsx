@@ -10,19 +10,19 @@ import { SForm } from '../../styles/other/form';
 import { SMsgErrorInput } from '../../styles/error/MsgErrorInput';
 import { WrapperInputField } from '../../styles/other/wrapperInputField';
 import { STable, STR, STD, STH } from '../../styles/other/table';
+import { RecentTsx } from '../../components/recentTsx';
+import { SErrorModal } from '../../styles/error/errorModal';
 
 export const HomePage = ({ 
   error,
-  handleSubmit,
-  handleChange,
-  values,
-  errors,
-  touched,
   tokensContract,
   errorData,
   isLoading,
   getMyBalance,
-  myBalance
+  myBalance,
+  formGetContract,
+  formTransferTokens,
+  recentTsxs
 }: IHomePageProps): JSX.Element => {
   // if network is uncorrect or metamask hasn't installed
   if(error) return <CriticalError error={error} />;
@@ -31,16 +31,20 @@ export const HomePage = ({
   const formGetContractBalance = (
     <>
       <STitle>Read from smart contract</STitle>
-      <SForm onSubmit={handleSubmit}>
+      <SForm onSubmit={formGetContract.handleSubmit}>
         <WrapperInputField>
           <SInput 
             name="address"
             type="text"
-            onChange={handleChange}
-            value={values.address}
+            onChange={formGetContract.handleChange}
+            value={formGetContract.values.address}
             placeholder="ERC20 contract address"
           />
-          {errors.address && touched.address && <SMsgErrorInput>{errors.address}</SMsgErrorInput>}
+          {
+          formGetContract.errors.address && 
+          formGetContract.touched.address && 
+          <SMsgErrorInput>{formGetContract.errors.address}</SMsgErrorInput>
+          }
         </WrapperInputField>
 
         <SButton type="submit" disabled={isLoading}>
@@ -99,40 +103,48 @@ export const HomePage = ({
   const formTransferToken = (
     <>
       <STitle>Send tokens</STitle>
-      <SForm onSubmit={handleSubmit}>
+      <SForm onSubmit={formTransferTokens.handleSubmit}>
         <WrapperInputField>
           <SInput 
-            name="address"
+            name="to"
             type="text"
-            onChange={handleChange}
-            value={values.address}
-            placeholder="ERC20 contract address"
+            onChange={formTransferTokens.handleChange}
+            value={formTransferTokens.values.to}
+            placeholder="To"
           />
-          {errors.address && touched.address && <SMsgErrorInput>{errors.address}</SMsgErrorInput>}
+          {formTransferTokens.errors.to && 
+          formTransferTokens.touched.to && 
+          <SMsgErrorInput>{formTransferTokens.errors.to}</SMsgErrorInput>}
+        </WrapperInputField>
 
+        <WrapperInputField>
           <SInput 
             name="amount"
             type="number"
-            onChange={handleChange}
-            value={values.address}
-            placeholder="ERC20 contract address"
+            onChange={formTransferTokens.handleChange}
+            value={formTransferTokens.values.amount}
+            placeholder="Amount"
           />
-          {errors.address && touched.address && <SMsgErrorInput>{errors.address}</SMsgErrorInput>}
+          {formTransferTokens.errors.amount && 
+          formTransferTokens.touched.amount && 
+          <SMsgErrorInput>{formTransferTokens.errors.amount}</SMsgErrorInput>}
         </WrapperInputField>
 
-        <SButton type="submit" disabled={isLoading}>
-          {isLoading ? "loading..." :"Get Token info"}
+        <SButton 
+          type="submit"
+          disabled={isLoading || addressContract === "-"} 
+          title={addressContract === "-" ? "you need 'get token info'" : ""}
+        >
+          {isLoading ? "loading..." :"Send"}
         </SButton>
       </SForm>
     </>
   );
-
-
-
+  
   const rightSide = (
-    <SCard>
+    <SCard removeMargin>
       <STitle>Recent Transactions</STitle>
-      22
+      {recentTsxs.map((tsx, idx) => <RecentTsx key={idx} tsx={tsx} />)}
     </SCard>
   );
   
@@ -148,8 +160,8 @@ export const HomePage = ({
               {getMyBalanceLayout}
             </SCard>
 
-            <SCard>
-              2
+            <SCard removeMargin marginLaptop>
+              {formTransferToken}
             </SCard>
           </SideContainer>
 
@@ -160,7 +172,7 @@ export const HomePage = ({
 
       </SContainer>
 
-      {/* @todo: errorData in small window in the right in the bottom*/}
+      {errorData && <SErrorModal>{errorData}</SErrorModal>}
     </SMain>
   )
 }

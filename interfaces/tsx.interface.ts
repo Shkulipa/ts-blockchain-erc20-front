@@ -1,5 +1,6 @@
 export interface ITsx {
   from: string,
   to: string,
-  value: number
+  value: number,
+  symbol: string
 }
