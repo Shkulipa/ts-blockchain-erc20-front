@@ -1,7 +1,7 @@
 import React from 'react'
 import { CriticalError } from '../../components/errors/critical.error';
 import { SCard } from '../../styles/other/card';
-import { SMain, SContainer, SideContainer, WrapperContent, SGetMyBalanceBtn } from '../../styles/home/home';
+import { SMain, SContainer, SSideContainer, WrapperContent, SGetMyBalanceBtn } from '../../styles/home/home';
 import { STitle } from '../../styles/other/title';
 import { IHomePageProps } from '../../interfaces/homePage.interface';
 import { SButton } from '../../styles/other/button';
@@ -142,7 +142,7 @@ export const HomePage = ({
   );
   
   const rightSide = (
-    <SCard removeMargin>
+    <SCard>
       <STitle>Recent Transactions</STitle>
       {recentTsxs.map((tsx, idx) => <RecentTsx key={idx} tsx={tsx} />)}
     </SCard>
@@ -153,21 +153,21 @@ export const HomePage = ({
       <SContainer>
 
         <WrapperContent>
-          <SideContainer>
+          <SSideContainer>
             <SCard>
               {formGetContractBalance}
               {listTokensCotract}
               {getMyBalanceLayout}
             </SCard>
 
-            <SCard removeMargin marginLaptop>
+            <SCard>
               {formTransferToken}
             </SCard>
-          </SideContainer>
+          </SSideContainer>
 
-          <SideContainer>
+          <SSideContainer>
             {rightSide}
-          </SideContainer>
+          </SSideContainer>
         </WrapperContent>
 
       </SContainer>
